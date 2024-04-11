@@ -1,6 +1,9 @@
+
+'use client'
 import { DropDownActions } from "@/components/DropDownActions";
 import { Icon } from "@/components/Icon";
-import { ChevronDown, Utensils } from "lucide-react";
+import { toast } from "react-hot-toast/headless";
+import { destroy } from "../actions/categorias/destroy";
 
 interface CategoriaItemProps {
     categoria: {
@@ -12,6 +15,18 @@ interface CategoriaItemProps {
 
 export function CategoriaItem(props: CategoriaItemProps){
     const { categoria } = props
+    
+    
+    function handleDelete(){
+        toast.promise(
+            destroy(categoria.id),
+             {
+               loading: 'Saving...',
+               success: <b>Settings saved!</b>,
+               error: <b>Could not save.</b>,
+             }
+           );
+    }
     return (
         <div key={categoria.id} className="flex justify-between py-2" id="data-row">
             <div className="flex gap-1 items-center">
@@ -19,7 +34,7 @@ export function CategoriaItem(props: CategoriaItemProps){
                 <span>{categoria.nome}</span>
             </div>
            
-            <DropDownActions />
+            <DropDownActions onDelete={()=>handleDelete}/>
         </div>
     )
 }
