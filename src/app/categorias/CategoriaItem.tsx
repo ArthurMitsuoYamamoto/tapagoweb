@@ -1,32 +1,29 @@
+"use client"
 
-'use client'
 import { DropDownActions } from "@/components/DropDownActions";
 import { Icon } from "@/components/Icon";
-import { toast } from "react-hot-toast/headless";
+import { toast } from "react-hot-toast";
 import { destroy } from "../actions/categorias/destroy";
-
+import { useRouter } from "next/navigation";
 interface CategoriaItemProps {
-    categoria: {
-        id: number,
-        nome: string,
-        icone: string
-    }
+    categoria: Categoria
 }
 
 export function CategoriaItem(props: CategoriaItemProps){
+    const router = useRouter()
     const { categoria } = props
-    
-    
+
     function handleDelete(){
         toast.promise(
             destroy(categoria.id),
              {
-               loading: 'Saving...',
-               success: <b>Settings saved!</b>,
-               error: <b>Could not save.</b>,
+               loading: 'excluindo...',
+               success: "Excluída com sucesso!",
+               error: "Erro ao excluir.",
              }
            );
     }
+
     return (
         <div key={categoria.id} className="flex justify-between py-2" id="data-row">
             <div className="flex gap-1 items-center">
@@ -34,7 +31,10 @@ export function CategoriaItem(props: CategoriaItemProps){
                 <span>{categoria.nome}</span>
             </div>
            
-            <DropDownActions onDelete={()=>handleDelete}/>
+            <DropDownActions 
+                onEdit={() => router.push(`/categorias/${categoria.id}`)}
+                onDelete={handleDelete} 
+            />
         </div>
     )
 }
